@@ -14,7 +14,7 @@
         aria-label="File upload area"
     >
         <!-- Main upload area -->
-        <div ref="dropzoneEl" class="ww-file-upload__dropzone" @click="openFileExplorer" @mousemove="handleMouseMove">
+        <div v-if="showDropzone" ref="dropzoneEl" class="ww-file-upload__dropzone" @click="openFileExplorer" @mousemove="handleMouseMove">
             <div
                 v-if="isDragging && !isDisabled && !isReadonly && enableCircleAnimation"
                 ref="circleEl"
@@ -265,6 +265,7 @@ export default {
 
         const fileList = computed(() => (Array.isArray(files.value) ? files.value : []));
         const hasFiles = computed(() => fileList.value.length > 0);
+        const showDropzone = computed(() => type.value !== 'single' || !hasFiles.value);
 
         watch([status, fileList], ([newStatus, newFiles]) => {
             if (newStatus && typeof newStatus === 'object') {
@@ -679,6 +680,7 @@ export default {
             isDragging,
             fileList,
             hasFiles,
+            showDropzone,
             isDisabled,
             isReadonly,
             acceptedFileTypes,
